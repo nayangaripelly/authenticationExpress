@@ -55,6 +55,8 @@
 
                 document.getElementById('userinfo').innerHTML = "username: " + data.username + " password: " + data.password;
             }
+
+            getmydata(); //if already have token in localstorage then no need to login again
             function logout()
             {
                 localStorage.removeItem("token");
