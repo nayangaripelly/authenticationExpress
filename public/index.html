@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <title> First full stack app</title>
+        <script>
+            async function signup() {
+                const username = document.getElementById("signup-username").value;
+                const password = document.getElementById("signup-password").value;
+
+                const res = await fetch('http://localhost:3000/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+
+            const data = await res.json();
+        }
+
+
+            async function signin()
+            {
+                const username = document.getElementById("signin-username").value;
+                const password = document.getElementById("signin-password").value;
+
+                const res = await fetch('http://localhost:3000/signin',{
+                    method:'POST',
+                     headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username : username,
+                        password : password
+                    })
+                })
+                const data = await res.json();
+                localStorage.setItem( "token", data.token );
+                getmydata();
+            }
+
+            async function getmydata()
+            {
+                const token = localStorage.getItem("token");
+                const res = await fetch("http://localhost:3000/me",{
+                    method: "GET",
+                    headers : {
+                        token : token
+                    }
+                });
+
+                const data = await res.json();
+
+                document.getElementById('userinfo').innerHTML = "username: " + data.username + " password: " + data.password;
+            }
+            function logout()
+            {
+                localStorage.removeItem("token");
+            }
+        </script>
+    </head>
+    <body>
+        <div>
+            <p>signup</p>
+            <input id="signup-username" type="text" name="username" placeholder="username"/>
+            <input id="signup-password" type="password" name="password" placeholder="password"/>
+            <button onclick=signup()> submit </button>
+        </div>
+        <div>
+            <p>signin</p>
+            <input id="signin-username" type="text" name="username" placeholder="username"/>
+            <input id="signin-password" type="password" name="password" placeholder="password"/>
+            <button onclick=signin()> submit </button>
+        </div>
+        <p id="userinfo">user info</p>
+        <button onclick=logout()>logout</button>
+    </body>
+</html>
